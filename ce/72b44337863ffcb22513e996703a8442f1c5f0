@@ -1,0 +1,19 @@
+Unity-Package/Assets/root/Tests/Editor/BaseTest.cs
+  s_6908d424636975::t_01951cfc04f59e 15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "ce72b44337863ffcb22513e996703a8442f1c5f0",
+  "prompts": {},
+  "sessions": {
+    "s_6908d424636975": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "383d28d1-a361-40a7-9656-23c1b29d7a19",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Ivan Murzak <ivandmurzak@gmail.com>"
+    }
+  }
+}
