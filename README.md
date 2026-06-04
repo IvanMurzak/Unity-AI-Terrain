@@ -13,6 +13,8 @@
 
 </div>
 
+<img width="100%" alt="Terrain" src="https://github.com/IvanMurzak/Unity-AI-Terrain/raw/main/docs/promo/promo-terrain.gif"/>
+
 AI-powered tools for the Unity [Terrain](https://docs.unity3d.com/Manual/script-Terrain.html) workflow. Create Terrain GameObjects backed by new TerrainData, set heightmap resolution and world size, sculpt and sample heights over a region or the whole terrain, manage TerrainLayers, paint texture layers onto the alphamap, configure detail and tree prototypes, scatter trees, stitch neighbor terrains, and modify any terrain component field directly through natural language commands — no manual inspector navigation. Wraps Unity's built-in **Terrain** modules (`com.unity.modules.terrain` + `com.unity.modules.terrainphysics`). Ideal for rapid greyboxing, procedural landscape generation, and terrain authoring. Built on top of the [AI Game Developer](https://github.com/IvanMurzak/Unity-MCP) platform.
 
 ### How to use
