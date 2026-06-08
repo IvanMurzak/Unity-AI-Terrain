@@ -12,8 +12,8 @@ and modify arbitrary terrain component fields. Built on top of
 
 ## Build / run
 
-- Package source: `Unity-Package/Assets/root/` (only this folder ships; Editor tools under `Editor/Scripts/Tools/`).
-- Version source of truth: `Unity-Package/Assets/root/package.json`. Bump with `.\commands\bump-version.ps1 -NewVersion "x.y.z"` (`-WhatIf` to preview).
+- Package source: `Unity-Package/Packages/com.ivanmurzak.unity.mcp.terrain/` (only this folder ships; Editor tools under `Editor/Scripts/Tools/`).
+- Version source of truth: `Unity-Package/Packages/com.ivanmurzak.unity.mcp.terrain/package.json`. Bump with `.\commands\bump-version.ps1 -NewVersion "x.y.z"` (`-WhatIf` to preview).
 - Update Unity-MCP dependency: `.\commands\update-ai-game-developer.ps1` (`-WhatIf` to preview).
 - Multi-version test rigs: `Unity-Tests/{2022.3.62f3,2023.2.22f1,6000.3.1f1}`. Tests run inside the Unity Editor (NUnit + `[UnityTest]`); CI uses `game-ci/unity-test-runner@v4`. Releases trigger on push to `main` when the version tag is new.
 - **Terrain is a built-in Unity module** — it ships with the Editor and version-locks to it (declared as `1.0.0` in every manifest). No extra registry package or asmdef reference is required beyond the base UnityEngine assemblies.
