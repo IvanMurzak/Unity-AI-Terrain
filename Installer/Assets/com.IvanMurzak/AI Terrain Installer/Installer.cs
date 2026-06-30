@@ -19,7 +19,7 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Installer
     public static partial class Installer
     {
         public const string PackageId = "com.ivanmurzak.unity.mcp.terrain";
-        public const string Version = "1.0.8";
+        public const string Version = "1.0.9";
 
         static Installer()
         {
