@@ -1,0 +1,23 @@
+"Installer/Assets/com.IvanMurzak/AI Terrain Installer/Installer.cs"
+  s_a2906e6a9ceeb4::t_cac5b213e84ebe 22
+Unity-Package/Packages/com.ivanmurzak.unity.mcp.terrain/package.json
+  s_a2906e6a9ceeb4::t_8546dc9b0d618a 18,22
+Unity-Package/Packages/packages-lock.json
+  s_a2906e6a9ceeb4::t_46d4eeebc81ccc 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "02d92bdc2e56a6751823f1c35ed010ba297f5280",
+  "prompts": {},
+  "sessions": {
+    "s_a2906e6a9ceeb4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5c8df1aa-679b-407a-9c28-132785dc0056",
+        "model": "unknown"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>"
+    }
+  }
+}
