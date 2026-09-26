@@ -8,7 +8,7 @@
 */
 
 #nullable enable
-#if UNITY_6000_5_OR_NEWER
+#if !UNITY_6000_5_OR_NEWER
 using System;
 using System.Collections;
 using AIGD;
@@ -59,7 +59,7 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
             var go = CreateTerrainGameObject(GO_TerrainName, heightmapResolution: 65, size: 150f);
 
             var tool = new Tool_Terrain();
-            var result = tool.GetTerrain(new GameObjectRef(go.GetEntityId()));
+            var result = tool.GetTerrain(new GameObjectRef(go.GetInstanceID()));
 
             Assert.IsNotNull(result, "Result should not be null");
             Assert.AreEqual(65, result.heightmapResolution, "Heightmap resolution should be reported");
@@ -90,7 +90,7 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
             var go = CreateTerrainGameObject(GO_TerrainName, heightmapResolution: 33, size: 100f);
 
             var tool = new Tool_Terrain();
-            var result = tool.SetSize(new GameObjectRef(go.GetEntityId()), width: 300f, height: 75f, length: 250f);
+            var result = tool.SetSize(new GameObjectRef(go.GetInstanceID()), width: 300f, height: 75f, length: 250f);
 
             Assert.IsTrue(result.success, "SetSize should succeed");
             Assert.AreEqual(new Vector3(300f, 75f, 250f), go.GetComponent<UnityEngine.Terrain>().terrainData.size,
@@ -103,7 +103,7 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
         public IEnumerator SetHeights_Uniform_ThenSample()
         {
             var go = CreateTerrainGameObject(GO_TerrainName, heightmapResolution: 33, size: 100f);
-            var goRef = new GameObjectRef(go.GetEntityId());
+            var goRef = new GameObjectRef(go.GetInstanceID());
 
             var tool = new Tool_Terrain();
             var setResult = tool.SetHeights(goRef, uniformHeight: 0.5f);
@@ -121,7 +121,7 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
         public IEnumerator SetHeights_Region_AffectsOnlyRegion()
         {
             var go = CreateTerrainGameObject(GO_TerrainName, heightmapResolution: 33, size: 100f);
-            var goRef = new GameObjectRef(go.GetEntityId());
+            var goRef = new GameObjectRef(go.GetInstanceID());
 
             var tool = new Tool_Terrain();
             // Raise a 4x4 region in the corner.
