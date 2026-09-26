@@ -8,7 +8,6 @@
 */
 
 #nullable enable
-#if UNITY_6000_5_OR_NEWER
 using System;
 using System.Collections;
 using com.IvanMurzak.ReflectorNet.Model;
@@ -30,8 +29,9 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
         public Vector3 ProbeOffset = Vector3.zero;
     }
 
-    public class TestTerrainGeneric : BaseTest
+    public partial class TestTerrainGeneric : BaseTest
     {
+#if UNITY_6000_5_OR_NEWER
         [UnityTest]
         public IEnumerator GetComponent_SerializesTerrain()
         {
@@ -124,6 +124,6 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
 
             yield return null;
         }
+#endif
     }
 }
-#endif

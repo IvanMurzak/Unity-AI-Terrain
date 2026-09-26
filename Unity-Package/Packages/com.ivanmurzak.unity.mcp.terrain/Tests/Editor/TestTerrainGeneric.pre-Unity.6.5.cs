@@ -20,17 +20,7 @@ using UnityEngine.TestTools;
 
 namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
 {
-    /// <summary>
-    /// A trivial test-only component with a public C# *field*, used to verify that the generic
-    /// 'terrain-modify-component' tool routes field writes through ReflectorNet's `fields` channel
-    /// (FieldInfo resolution — no cross-fallback to properties).
-    /// </summary>
-    public class FieldChannelProbe : MonoBehaviour
-    {
-        public Vector3 ProbeOffset = Vector3.zero;
-    }
-
-    public class TestTerrainGeneric : BaseTest
+    public partial class TestTerrainGeneric : BaseTest
     {
         [UnityTest]
         public IEnumerator GetComponent_SerializesTerrain()
