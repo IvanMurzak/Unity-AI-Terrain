@@ -104,8 +104,8 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
             var probe = go.AddComponent<FieldChannelProbe>();
 
             var json = $@"{{
-                ""gameObjectRef"": {{ ""instanceID"": {go.GetEntityId()} }},
-                ""componentRef"": {{ ""instanceID"": {probe.GetEntityId()} }},
+                ""gameObjectRef"": {{ ""instanceID"": ""{UnityEngine.EntityId.ToULong(go.GetEntityId())}"" }},
+                ""componentRef"": {{ ""instanceID"": ""{UnityEngine.EntityId.ToULong(probe.GetEntityId())}"" }},
                 ""data"": {{
                     ""typeName"": ""com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests.FieldChannelProbe"",
                     ""fields"": [
