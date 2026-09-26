@@ -8,6 +8,7 @@
 */
 
 #nullable enable
+#if !UNITY_6000_5_OR_NEWER
 using System;
 using System.Collections;
 using com.IvanMurzak.ReflectorNet.Model;
@@ -19,19 +20,8 @@ using UnityEngine.TestTools;
 
 namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
 {
-    /// <summary>
-    /// A trivial test-only component with a public C# *field*, used to verify that the generic
-    /// 'terrain-modify-component' tool routes field writes through ReflectorNet's `fields` channel
-    /// (FieldInfo resolution — no cross-fallback to properties).
-    /// </summary>
-    public class FieldChannelProbe : MonoBehaviour
-    {
-        public Vector3 ProbeOffset = Vector3.zero;
-    }
-
     public partial class TestTerrainGeneric : BaseTest
     {
-#if UNITY_6000_5_OR_NEWER
         [UnityTest]
         public IEnumerator GetComponent_SerializesTerrain()
         {
@@ -40,8 +30,8 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
 
             var tool = new Tool_Terrain();
             var result = tool.GetComponentData(
-                gameObjectRef: new GameObjectRef(go.GetEntityId()),
-                componentRef: new ComponentRef(terrain.GetEntityId()));
+                gameObjectRef: new GameObjectRef(go.GetInstanceID()),
+                componentRef: new ComponentRef(terrain.GetInstanceID()));
 
             Assert.IsNotNull(result, "Result should not be null");
             Assert.IsNotNull(result.data, "Serialized data should not be null");
@@ -56,7 +46,7 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
             var go = CreateTerrainGameObject(GO_TerrainName);
 
             var tool = new Tool_Terrain();
-            var result = tool.GetComponentData(new GameObjectRef(go.GetEntityId()));
+            var result = tool.GetComponentData(new GameObjectRef(go.GetInstanceID()));
 
             Assert.IsNotNull(result.data, "Should serialize the first terrain component");
             StringAssert.Contains("Terrain", result.componentType, "Resolved component should be a Terrain type");
@@ -87,9 +77,9 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
 
             var tool = new Tool_Terrain();
             var result = tool.ModifyComponent(
-                gameObjectRef: new GameObjectRef(go.GetEntityId()),
+                gameObjectRef: new GameObjectRef(go.GetInstanceID()),
                 data: diff,
-                componentRef: new ComponentRef(probe.GetEntityId()));
+                componentRef: new ComponentRef(probe.GetInstanceID()));
 
             Assert.IsTrue(result.success, "Modification should succeed via the fields channel");
             Assert.AreEqual(newOffset, probe.ProbeOffset, "ProbeOffset field should be modified");
@@ -104,8 +94,8 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
             var probe = go.AddComponent<FieldChannelProbe>();
 
             var json = $@"{{
-                ""gameObjectRef"": {{ ""instanceID"": ""{UnityEngine.EntityId.ToULong(go.GetEntityId())}"" }},
-                ""componentRef"": {{ ""instanceID"": ""{UnityEngine.EntityId.ToULong(probe.GetEntityId())}"" }},
+                ""gameObjectRef"": {{ ""instanceID"": {go.GetInstanceID()} }},
+                ""componentRef"": {{ ""instanceID"": {probe.GetInstanceID()} }},
                 ""data"": {{
                     ""typeName"": ""com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests.FieldChannelProbe"",
                     ""fields"": [
@@ -124,6 +114,6 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
 
             yield return null;
         }
-#endif
     }
 }
+#endif

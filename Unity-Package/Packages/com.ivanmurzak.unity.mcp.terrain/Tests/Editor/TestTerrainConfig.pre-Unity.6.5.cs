@@ -8,7 +8,7 @@
 */
 
 #nullable enable
-#if UNITY_6000_5_OR_NEWER
+#if !UNITY_6000_5_OR_NEWER
 using System;
 using System.Collections;
 using AIGD;
@@ -39,7 +39,7 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
 
             var tool = new Tool_Terrain();
             // 100 is not a valid (2^n + 1) value; expect rounding up to 129.
-            var result = tool.SetHeightmapResolution(new GameObjectRef(go.GetEntityId()), heightmapResolution: 100);
+            var result = tool.SetHeightmapResolution(new GameObjectRef(go.GetInstanceID()), heightmapResolution: 100);
 
             Assert.IsTrue(result.success, "SetHeightmapResolution should succeed");
             Assert.AreEqual(129, result.heightmapResolution, "Resolution should round up to a valid 2^n + 1 value");
@@ -51,7 +51,7 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
         public IEnumerator AddLayer_FromTexture_ThenRemove()
         {
             var go = CreateTerrainGameObject(GO_TerrainName);
-            var goRef = new GameObjectRef(go.GetEntityId());
+            var goRef = new GameObjectRef(go.GetInstanceID());
             var tex = CreateTextureAsset("layer");
             var texPath = AssetDatabase.GetAssetPath(tex);
 
@@ -73,7 +73,7 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
         public IEnumerator PaintLayer_WritesAlphamap()
         {
             var go = CreateTerrainGameObject(GO_TerrainName);
-            var goRef = new GameObjectRef(go.GetEntityId());
+            var goRef = new GameObjectRef(go.GetInstanceID());
             var data = go.GetComponent<UnityEngine.Terrain>().terrainData;
 
             var tool = new Tool_Terrain();
@@ -94,7 +94,7 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
         public IEnumerator SetDetailPrototypes_FromTexture()
         {
             var go = CreateTerrainGameObject(GO_TerrainName);
-            var goRef = new GameObjectRef(go.GetEntityId());
+            var goRef = new GameObjectRef(go.GetInstanceID());
             var texPath = AssetDatabase.GetAssetPath(CreateTextureAsset("grass"));
 
             var tool = new Tool_Terrain();
@@ -110,7 +110,7 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
         public IEnumerator SetTreePrototypes_PlaceTrees()
         {
             var go = CreateTerrainGameObject(GO_TerrainName);
-            var goRef = new GameObjectRef(go.GetEntityId());
+            var goRef = new GameObjectRef(go.GetInstanceID());
 
             // Build a simple prefab asset to use as a tree.
             var prefabSource = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -140,8 +140,8 @@ namespace com.IvanMurzak.Unity.MCP.Terrain.Editor.Tests
 
             var tool = new Tool_Terrain();
             var result = tool.SetNeighbors(
-                new GameObjectRef(center.GetEntityId()),
-                rightRef: new GameObjectRef(right.GetEntityId()));
+                new GameObjectRef(center.GetInstanceID()),
+                rightRef: new GameObjectRef(right.GetInstanceID()));
 
             Assert.IsTrue(result.success, "SetNeighbors should succeed");
             Assert.AreEqual("RightTerrain", result.right, "Right neighbor should be reported");
