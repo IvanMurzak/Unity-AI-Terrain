@@ -47,15 +47,13 @@ maintainer-applied `ci-ok` label and abort if the PR touches `.github/workflows/
 
 - **Main thread only.** Every Unity API call inside a tool MUST be wrapped in
   `MainThread.Instance.Run(() => { ... })` — MCP calls arrive off the main thread; only argument validation
-  runs outside. ReflectorNet calls (`reflector.Serialize`, `TryModify`) touch Unity objects and must run
-  inside it too.
+  runs outside. So must ReflectorNet calls (`reflector.Serialize`, `TryModify`).
 - **Tool shape.** One `[AiToolType] partial class Tool_Terrain`, split one operation per file
   (`Terrain.Create.cs`, `Terrain.SetHeights.cs`, `Terrain.PaintLayer.cs`, `Terrain.ModifyComponent.cs`, …).
-  Each tool method carries `[AiTool(<id>, Title=…, …Hint=…)]`, `[AiSkillDescription]` / `[AiSkillBody]`
-  (LLM-facing skill copy) and `[Description]` (parameter/return docs); tool IDs are
-  `public const string …ToolId = "terrain-…"`. Every `[AiTool]` method declares at least one parameter. Shared
-  helpers (`ResolveGameObject`, `RoundHeightmapResolution`, `MarkDirtyAndRepaint`) live in
-  `Terrain.Helpers.cs`; error strings in `Tool_Terrain.Error` (`Terrain.cs`).
+  Each tool method carries `[AiTool(<id>, Title=…, …Hint=…)]`, `[AiSkillDescription]` / `[AiSkillBody]` and
+  `[Description]` (all LLM-facing); tool IDs are `public const string …ToolId = "terrain-…"`. Every `[AiTool]`
+  method declares at least one parameter. Shared helpers (`ResolveGameObject`, `RoundHeightmapResolution`,
+  `MarkDirtyAndRepaint`) live in `Terrain.Helpers.cs`; error strings in `Tool_Terrain.Error` (`Terrain.cs`).
 - **Terrain is a built-in module**: it ships with and version-locks to the Editor; no extra registry package
   or asmdef reference beyond the base UnityEngine assemblies.
 - **EntityId split.** Unity 6.5+ returns `UnityEngine.EntityId` from `GameObject.GetEntityId()`; pre-6.5
