@@ -1,0 +1,69 @@
+Unity-Package/Assets/Plugins/NuGet/.nuget-installed.json
+  s_9284ad4c8de2f4::t_27c0b79ffa5826 4,10,16
+Unity-Package/Assets/Plugins/NuGet/McpPlugin.Common.dll.meta
+  s_9284ad4c8de2f4::t_ee2e57cb90d615 14-19,28
+Unity-Package/Assets/Plugins/NuGet/McpPlugin.dll.meta
+  s_9284ad4c8de2f4::t_035408a5398729 14-19,28
+Unity-Package/Assets/Plugins/NuGet/Microsoft.Extensions.DependencyInjection.Abstractions.dll.meta
+  s_9284ad4c8de2f4::t_2fb7567275cea1 14-19,28
+Unity-Package/Assets/Plugins/NuGet/Microsoft.Extensions.Logging.Abstractions.dll.meta
+  s_9284ad4c8de2f4::t_a5b7c6551fadf5 14-19,28
+Unity-Package/Assets/Plugins/NuGet/System.Runtime.CompilerServices.Unsafe.dll.meta
+  s_9284ad4c8de2f4::t_59b98db5fec7c5 14-19,28
+Unity-Package/Packages/packages-lock.json
+  s_9284ad4c8de2f4::t_c706c0fbb3900e 5,14-23,26,33,44
+Unity-Tests/2022.3.62f3/Assets/Plugins/NuGet/.nuget-installed.json
+  s_6076ec2c5dede9::t_2889716308702b 4,10,16
+Unity-Tests/2022.3.62f3/Assets/Plugins/NuGet/McpPlugin.Common.dll.meta
+  s_6076ec2c5dede9::t_1980ebd9d46ee9 14-19,28
+Unity-Tests/2022.3.62f3/Assets/Plugins/NuGet/McpPlugin.dll.meta
+  s_6076ec2c5dede9::t_5f5c3b4bee3d80 14-19,28
+Unity-Tests/2022.3.62f3/Assets/Plugins/NuGet/Microsoft.Extensions.DependencyInjection.Abstractions.dll.meta
+  s_6076ec2c5dede9::t_fef99010b5fdfc 14-19,28
+Unity-Tests/2022.3.62f3/Assets/Plugins/NuGet/Microsoft.Extensions.Logging.Abstractions.dll.meta
+  s_6076ec2c5dede9::t_ba2a73c64c749f 14-19,28
+Unity-Tests/2022.3.62f3/Assets/Plugins/NuGet/System.Runtime.CompilerServices.Unsafe.dll.meta
+  s_6076ec2c5dede9::t_788aeab064d289 14-19,28
+Unity-Tests/2022.3.62f3/Packages/packages-lock.json
+  s_6076ec2c5dede9::t_ce4ffe8c4dbdcd 4,19
+Unity-Tests/2023.2.22f1/Assets/Plugins/NuGet/.nuget-installed.json
+  s_f7f7392a09f46e::t_c6d7438a931f4a 4,10,16
+Unity-Tests/2023.2.22f1/Packages/packages-lock.json
+  s_6076ec2c5dede9::t_f737b69de2fba8 4,19
+Unity-Tests/6000.3.1f1/Assets/Plugins/NuGet/.nuget-installed.json
+  s_f7f7392a09f46e::t_a478435e6ff550 4,10,16
+Unity-Tests/6000.3.1f1/Packages/packages-lock.json
+  s_f7f7392a09f46e::t_a77a53b6d7208f 4,19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "6b94c530284802ec17ed5b7d953949ec08bc5ae9",
+  "prompts": {},
+  "sessions": {
+    "s_6076ec2c5dede9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "306532f7-7832-447b-b08b-4d9ef827e62e",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>"
+    },
+    "s_9284ad4c8de2f4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "64f4c13c-1681-4443-9cc9-81bbde69cd56",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>"
+    },
+    "s_f7f7392a09f46e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d6d5d57f-6526-4873-9255-59c34d4f8571",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>"
+    }
+  }
+}

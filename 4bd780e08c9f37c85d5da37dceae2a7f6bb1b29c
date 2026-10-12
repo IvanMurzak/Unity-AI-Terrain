@@ -1,0 +1,39 @@
+Unity-Package/ProjectSettings/PackageManagerSettings.asset
+  s_9284ad4c8de2f4::t_89b654707244f2 1-45
+Unity-Tests/2022.3.62f3/ProjectSettings/PackageManagerSettings.asset
+  s_6076ec2c5dede9::t_cfb8d10bb84ddf 43-44
+Unity-Tests/2023.2.22f1/ProjectSettings/PackageManagerSettings.asset
+  s_f7f7392a09f46e::t_77f726d837725a 44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "4bd780e08c9f37c85d5da37dceae2a7f6bb1b29c",
+  "prompts": {},
+  "sessions": {
+    "s_6076ec2c5dede9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "306532f7-7832-447b-b08b-4d9ef827e62e",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>"
+    },
+    "s_9284ad4c8de2f4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "64f4c13c-1681-4443-9cc9-81bbde69cd56",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>"
+    },
+    "s_f7f7392a09f46e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d6d5d57f-6526-4873-9255-59c34d4f8571",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>"
+    }
+  }
+}

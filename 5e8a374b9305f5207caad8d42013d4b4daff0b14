@@ -1,0 +1,21 @@
+Unity-Package/Packages/com.ivanmurzak.unity.mcp.terrain/Tests/Editor/TestTerrainGeneric.cs
+  s_4d722dde7f9360::t_e0be20cea489b3 32,34,127
+Unity-Package/Packages/com.ivanmurzak.unity.mcp.terrain/Tests/Editor/TestTerrainGeneric.pre-Unity.6.5.cs
+  s_4d722dde7f9360::t_edef6b15c300e2 23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "5e8a374b9305f5207caad8d42013d4b4daff0b14",
+  "prompts": {},
+  "sessions": {
+    "s_4d722dde7f9360": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "s_4d722dde7f9360",
+        "model": "unknown"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>"
+    }
+  }
+}
