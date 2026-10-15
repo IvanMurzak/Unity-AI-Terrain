@@ -1,10 +1,10 @@
 # AGENTS.md — Unity-AI-Terrain
 
 Unity package `com.ivanmurzak.unity.mcp.terrain` — wraps Unity's built-in **Terrain** modules
-(`com.unity.modules.terrain` + `com.unity.modules.terrainphysics`) as `terrain-*` MCP tools: create Terrain
-GameObjects + TerrainData, set heightmap resolution and size, set/sample heights, add/remove TerrainLayers,
-paint a layer over a region, set detail/tree prototypes, place trees, set neighbors, list/get terrains, and
-modify arbitrary terrain component fields. An extension of
+(`com.unity.modules.terrain` + `com.unity.modules.terrainphysics`) available to Unity-MCP's RQL tools (`rql-query` /
+`rql-mutate`; no extension MCP tools): the `terrain` source (Create, CreateLayer), Terrain methods for heights, splat
+painting, layers, prototypes, trees and neighbors, validated TerrainData members, and `terrain.*` height sampling
+functions. An extension of
 [AI Game Developer](https://github.com/IvanMurzak/Unity-MCP) (`com.ivanmurzak.unity.mcp`), generated from
 `Unity-AI-Tools-Template`; the user-facing tool list is in `README.md`.
 
@@ -46,26 +46,14 @@ maintainer-applied `ci-ok` label and abort if the PR touches `.github/workflows/
 
 ## Critical invariants
 
-- **Main thread only.** Every Unity API call inside a tool MUST be wrapped in
-  `MainThread.Instance.Run(() => { ... })` — MCP calls arrive off the main thread; only argument validation
-  runs outside. So must ReflectorNet calls (`reflector.Serialize`, `TryModify`).
-- **Tool shape.** One `[AiToolType] partial class Tool_Terrain`, split one operation per file
-  (`Terrain.Create.cs`, `Terrain.SetHeights.cs`, `Terrain.PaintLayer.cs`, `Terrain.ModifyComponent.cs`, …).
-  Each tool method carries `[AiTool(<id>, Title=…, …Hint=…)]`, `[AiSkillDescription]` / `[AiSkillBody]` and
-  `[Description]` (all LLM-facing); tool IDs are `public const string …ToolId = "terrain-…"`. Every `[AiTool]`
-  method declares at least one parameter. Shared helpers (`ResolveGameObject`, `RoundHeightmapResolution`,
-  `MarkDirtyAndRepaint`) live in `Terrain.Helpers.cs`; error strings in `Tool_Terrain.Error` (`Terrain.cs`).
+- **RQL surface.** Everything is registered by `TerrainModule` (`IRqlModule`, Order 100, found through TypeCache) and
+  documented in its `AddGuide("Terrain", …)` text, which is rendered into the `unity-rql` skill.
+- **Undo.** The engine records the call target (the Terrain); heights, splat maps, layers and trees live in the
+  TerrainData asset, so every Terrain method writes through `TerrainOps.Write` (records the TerrainData, and the splat
+  textures when painting, then marks both dirty).
+- **Copies.** TerrainData returns copies of its layer / prototype / tree arrays: the TerrainData adapter assigns element
+  writes back (`CopyOnRead`), and prototype members are read-only (an element is replaced whole from an object literal).
 - **Terrain is a built-in module**: it ships with and version-locks to the Editor; no extra registry package
   or asmdef reference beyond the base UnityEngine assemblies.
-- **EntityId split.** Unity 6.5+ returns `UnityEngine.EntityId` from `GameObject.GetEntityId()`; pre-6.5
-  returns `int` from `GetInstanceID()`. Files surfacing an instance ID ship as a `*.cs`
-  (`#if UNITY_6000_5_OR_NEWER`) + `*.pre-Unity.6.5.cs` (`#if !UNITY_6000_5_OR_NEWER`) pair — e.g.
-  `Terrain.Create.cs` / `Terrain.Create.pre-Unity.6.5.cs`. Keep both variants in sync.
-- **Qualify `UnityEngine.Component` / `UnityEngine.Terrain`.** `Component` collides with
-  `System.ComponentModel` (pulled in by `[Description]`); `Terrain` collides with the namespace token.
-- **Generic modify via ReflectorNet.** `terrain-modify-component` applies a `SerializedMember` diff through
-  `reflector.TryModify(ref boxed, data, …)`. The `fields` channel resolves `FieldInfo` and `props` resolves
-  `PropertyInfo`, with **no cross-fallback**: a public field MUST go in `fields`, a property in `props`
-  (otherwise: `Property '…' not found or not writable`). It mirrors the base `gameobject-component-modify`
-  tool.
+- **Alias `UnityEngine.Terrain`** inside the `…Rql.Terrains` namespace block: short names may resolve to namespaces.
 - Every C# file starts with the copyright box header and `#nullable enable`.

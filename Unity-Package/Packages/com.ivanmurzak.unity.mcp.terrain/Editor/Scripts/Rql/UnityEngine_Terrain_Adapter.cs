@@ -82,9 +82,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Terrains
             for (int row = 0; row < h; row++)
                 for (int col = 0; col < w; col++)
                     heights[row, col] = height;
-            TerrainOps.RecordData(data, "set heights");
-            data.SetHeights(x, y, heights);
-            TerrainOps.Dirty(data, t);
+            TerrainOps.Write(t, data, "set heights", () => data.SetHeights(x, y, heights));
             return w * h;
         }
 
@@ -105,9 +103,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Terrains
                     heights[row, col] = v;
                 }
             }
-            TerrainOps.RecordData(data, "set heights");
-            data.SetHeights(x, y, heights);
-            TerrainOps.Dirty(data, t);
+            TerrainOps.Write(t, data, "set heights", () => data.SetHeights(x, y, heights));
             return w * h;
         }
 
@@ -123,6 +119,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Terrains
             (x, y, w, h) = TerrainOps.Region(x, y, w, h, data.alphamapResolution, "alphamap");
 
             var maps = data.GetAlphamaps(x, y, w, h); // [row, col, layer]
+            float rest = 1f - strength;
             for (int row = 0; row < h; row++)
             {
                 for (int col = 0; col < w; col++)
@@ -130,7 +127,6 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Terrains
                     if (layers == 1) { maps[row, col, 0] = 1f; continue; }
                     float others = 0f;
                     for (int l = 0; l < layers; l++) if (l != layer) others += maps[row, col, l];
-                    float rest = 1f - strength;
                     for (int l = 0; l < layers; l++)
                     {
                         if (l == layer) maps[row, col, l] = strength;
@@ -138,9 +134,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Terrains
                     }
                 }
             }
-            TerrainOps.RecordData(data, "paint layer", alphamaps: true);
-            data.SetAlphamaps(x, y, maps);
-            TerrainOps.Dirty(data, t);
+            TerrainOps.Write(t, data, "paint layer", () => data.SetAlphamaps(x, y, maps), alphamaps: true);
             return w * h;
         }
 
@@ -151,9 +145,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Terrains
             var list = new List<TerrainLayer>(data.terrainLayers ?? Array.Empty<TerrainLayer>());
             if (list.Contains(layer)) throw new ArgumentException($"layer '{layer.name}' is already on the terrain (index {list.IndexOf(layer)})");
             list.Add(layer);
-            TerrainOps.RecordData(data, "add layer", alphamaps: true);
-            data.terrainLayers = list.ToArray();
-            TerrainOps.Dirty(data, t);
+            TerrainOps.Write(t, data, "add layer", () => data.terrainLayers = list.ToArray(), alphamaps: true);
             return list.Count - 1;
         }
 
@@ -163,9 +155,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Terrains
             var list = new List<TerrainLayer>(data.terrainLayers ?? Array.Empty<TerrainLayer>());
             if (index < 0 || index >= list.Count) throw new ArgumentOutOfRangeException(nameof(index), $"layer {index} does not exist ({list.Count} layer(s))");
             list.RemoveAt(index);
-            TerrainOps.RecordData(data, "remove layer", alphamaps: true);
-            data.terrainLayers = list.ToArray();
-            TerrainOps.Dirty(data, t);
+            TerrainOps.Write(t, data, "remove layer", () => data.terrainLayers = list.ToArray(), alphamaps: true);
             return list.Count;
         }
 
@@ -176,9 +166,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Terrains
             if (prefab == null) throw new ArgumentNullException(nameof(prefab));
             var data = TerrainOps.Data(t);
             var list = new List<TreePrototype>(data.treePrototypes ?? Array.Empty<TreePrototype>()) { new TreePrototype { prefab = prefab, bendFactor = bendFactor } };
-            TerrainOps.RecordData(data, "add tree prototype");
-            data.treePrototypes = list.ToArray();
-            TerrainOps.Dirty(data, t);
+            TerrainOps.Write(t, data, "add tree prototype", () => data.treePrototypes = list.ToArray());
             return list.Count - 1;
         }
 
@@ -200,9 +188,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Terrains
             };
             var data = TerrainOps.Data(t);
             var list = new List<DetailPrototype>(data.detailPrototypes ?? Array.Empty<DetailPrototype>()) { prototype };
-            TerrainOps.RecordData(data, "add detail prototype");
-            data.detailPrototypes = list.ToArray();
-            TerrainOps.Dirty(data, t);
+            TerrainOps.Write(t, data, "add detail prototype", () => data.detailPrototypes = list.ToArray());
             return list.Count - 1;
         }
 
@@ -238,9 +224,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Terrains
                     lightmapColor = Color.white,
                 });
             }
-            TerrainOps.RecordData(data, "place trees");
-            data.SetTreeInstances(instances.ToArray(), snapToHeightmap: true);
-            TerrainOps.Dirty(data, t);
+            TerrainOps.Write(t, data, "place trees", () => data.SetTreeInstances(instances.ToArray(), snapToHeightmap: true));
             return positions.Length;
         }
 
@@ -248,9 +232,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Terrains
         {
             var data = TerrainOps.Data(t);
             int removed = data.treeInstanceCount;
-            TerrainOps.RecordData(data, "clear trees");
-            data.SetTreeInstances(Array.Empty<TreeInstance>(), snapToHeightmap: false);
-            TerrainOps.Dirty(data, t);
+            TerrainOps.Write(t, data, "clear trees", () => data.SetTreeInstances(Array.Empty<TreeInstance>(), snapToHeightmap: false));
             return removed;
         }
 

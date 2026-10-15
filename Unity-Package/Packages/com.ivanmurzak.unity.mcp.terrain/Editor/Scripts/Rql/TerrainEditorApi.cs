@@ -43,7 +43,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Terrains
             var path = dataPath == null
                 ? AssetDatabase.GenerateUniqueAssetPath($"Assets/TerrainData_{name}.asset")
                 : TerrainOps.NewAssetPath(dataPath, ".asset");
-            TerrainOps.EnsureFolder(Path.GetDirectoryName(path));
+            RqlEditorApi.Instance.CreateFolder(Path.GetDirectoryName(path)!);
 
             // heightmapResolution before size: changing the resolution keeps the size, the other way round it rescales.
             var data = new TerrainData { heightmapResolution = heightmapResolution, size = s, name = Path.GetFileNameWithoutExtension(path) };

@@ -34,17 +34,17 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Terrains
         public static TerrainData Data(Terrain terrain) =>
             terrain.terrainData != null ? terrain.terrainData : throw new InvalidOperationException($"terrain '{terrain.name}' has no TerrainData");
 
-        /// <summary>Record the TerrainData (complete snapshot: heights, splat maps, trees) for Undo before a write.</summary>
-        public static void RecordData(TerrainData data, string action, bool alphamaps = false)
+        /// <summary>
+        /// Record the TerrainData (complete snapshot: heights, splat maps, trees; with <paramref name="alphamaps"/> the splat
+        /// textures too) for Undo, apply <paramref name="write"/>, then mark the data and the terrain dirty.
+        /// </summary>
+        public static void Write(Terrain terrain, TerrainData data, string action, Action write, bool alphamaps = false)
         {
             Undo.RegisterCompleteObjectUndo(data, "RQL terrain " + action);
             if (alphamaps && data.alphamapTextures.Length > 0) Undo.RegisterCompleteObjectUndo(data.alphamapTextures, "RQL terrain " + action);
-        }
-
-        public static void Dirty(TerrainData data, Terrain? terrain = null)
-        {
+            write();
             EditorUtility.SetDirty(data);
-            if (terrain != null) EditorUtility.SetDirty(terrain);
+            EditorUtility.SetDirty(terrain);
         }
 
         /// <summary>
@@ -83,18 +83,6 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Terrains
 
         private static bool IsPowerOfTwo(int v) => v > 0 && (v & (v - 1)) == 0;
 
-        /// <summary>Create missing folders of an "Assets/…" path.</summary>
-        public static void EnsureFolder(string? folder)
-        {
-            if (string.IsNullOrEmpty(folder)) return;
-            folder = folder!.Replace('\\', '/').TrimEnd('/');
-            if (AssetDatabase.IsValidFolder(folder)) return;
-            var parent = Path.GetDirectoryName(folder)?.Replace('\\', '/');
-            if (string.IsNullOrEmpty(parent)) throw new ArgumentException($"'{folder}' is not under Assets/");
-            EnsureFolder(parent);
-            AssetDatabase.CreateFolder(parent, Path.GetFileName(folder));
-        }
-
         /// <summary>Validate a new asset path: under Assets/, the expected extension, and not overwriting an existing asset.</summary>
         public static string NewAssetPath(string path, string extension)
         {
@@ -102,7 +90,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Terrains
             if (!path.StartsWith("Assets/", StringComparison.Ordinal)) throw new ArgumentException($"'{path}' must start with Assets/");
             if (!path.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) throw new ArgumentException($"'{path}' must end with {extension}");
             if (AssetDatabase.LoadMainAssetAtPath(path) != null) throw new ArgumentException($"an asset already exists at '{path}' (choose another path)");
-            EnsureFolder(Path.GetDirectoryName(path));
+            RqlEditorApi.Instance.CreateFolder(Path.GetDirectoryName(path)!);
             return path;
         }
     }

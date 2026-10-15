@@ -33,40 +33,24 @@ AI-powered tools for the Unity [Terrain](https://docs.unity3d.com/Manual/script-
 | 2023.2.22f1   | [![r](https://github.com/IvanMurzak/Unity-AI-Terrain/workflows/release/badge.svg?job=test-unity-2023-2-22f1-editmode)](https://github.com/IvanMurzak/Unity-AI-Terrain/actions/workflows/release.yml)       | [![r](https://github.com/IvanMurzak/Unity-AI-Terrain/workflows/release/badge.svg?job=test-unity-2023-2-22f1-playmode)](https://github.com/IvanMurzak/Unity-AI-Terrain/actions/workflows/release.yml)       | [![r](https://github.com/IvanMurzak/Unity-AI-Terrain/workflows/release/badge.svg?job=test-unity-2023-2-22f1-standalone)](https://github.com/IvanMurzak/Unity-AI-Terrain/actions/workflows/release.yml)       |
 | 6000.3.1f1    | [![r](https://github.com/IvanMurzak/Unity-AI-Terrain/workflows/release/badge.svg?job=test-unity-6000-3-1f1-editmode)](https://github.com/IvanMurzak/Unity-AI-Terrain/actions/workflows/release.yml)        | [![r](https://github.com/IvanMurzak/Unity-AI-Terrain/workflows/release/badge.svg?job=test-unity-6000-3-1f1-playmode)](https://github.com/IvanMurzak/Unity-AI-Terrain/actions/workflows/release.yml)        | [![r](https://github.com/IvanMurzak/Unity-AI-Terrain/workflows/release/badge.svg?job=test-unity-6000-3-1f1-standalone)](https://github.com/IvanMurzak/Unity-AI-Terrain/actions/workflows/release.yml)        |
 
-## AI Terrain Tools
+## RQL (no extension tools)
 
-16 tools, grouped by purpose:
+On the RQL branch of Unity-MCP this package adds no MCP tools: it contributes an RQL module, so agents use
+`rql-query` / `rql-mutate` (the `unity-rql` skill carries the full guide with examples). `T` below stands for
+`objects | get components | where $ is Terrain`.
 
-### Terrain lifecycle
-
-- `terrain-create` - Create a `Terrain` GameObject backed by a new `TerrainData` asset (heightmap resolution + size)
-- `terrain-list` - List all Terrains in the active scene (name, size, heightmap resolution, layer count)
-- `terrain-get` - Get a Terrain's data (size, resolutions, layers, prototypes, tree count, neighbors)
-
-### Shape & heightmap
-
-- `terrain-set-heightmap-resolution` - Set the heightmap resolution (rounded to a valid 2^n + 1)
-- `terrain-set-size` - Set the terrain world size (width / height / length)
-- `terrain-set-heights` - Set heightmap values over a region (or whole terrain): uniform fill or explicit 2D array
-- `terrain-sample-heights` - Read heightmap values over a region (or whole terrain) with min/max/average stats
-
-### Layers & painting
-
-- `terrain-add-layer` - Add a `TerrainLayer` (from an existing asset or a new layer built from a texture)
-- `terrain-remove-layer` - Remove a `TerrainLayer` by index
-- `terrain-paint-layer` - Paint a layer over a region by writing the alphamap (splatmap)
-
-### Detail, trees & tiling
-
-- `terrain-set-detail-prototypes` - Replace the detail prototypes (grass / detail meshes) from textures / prefabs
-- `terrain-set-tree-prototypes` - Replace the tree prototypes from prefabs
-- `terrain-place-trees` - Place trees: random scatter (count) or explicit normalized positions
-- `terrain-set-neighbors` - Set the left / top / right / bottom neighbor Terrains so Unity blends seams
-
-### Generic
-
-- `terrain-get-component` - Generic read: serialize a `Terrain` / `TerrainCollider` component via ReflectorNet
-- `terrain-modify-component` - Generic write: apply a `SerializedMember` diff to a terrain component via ReflectorNet (escape hatch for fields not covered by the dedicated tools)
+| Former tool | RQL |
+| --- | --- |
+| `terrain-create` | `terrain \| call Create("Island", "Assets/Terrain/Island.asset", 257, "(500, 120, 500)")` (name, dataPath, heightmapResolution, size, position) |
+| `terrain-list` / `-get` / `-get-component` | `T \| select $ref gameObject.name terrainData.size terrainData.heightmapResolution terrainData.terrainLayers.name` |
+| `terrain-set-heightmap-resolution` / `-set-size` | `T \| set terrainData.heightmapResolution = 513, terrainData.size = "(800, 200, 800)"` (validated, not rounded) |
+| `terrain-set-heights` | `T \| call SetHeights(0.6, 100, 100, 32, 32)`, `call SetHeightGrid([[0.1, 0.2], [0.3, 0.4]], 10, 20)` |
+| `terrain-sample-heights` | `T \| select s=(terrain.heightStats($))`, `terrain.heights($, x, y, w, h)`, `terrain.heightAt($, worldX, worldZ)` |
+| `terrain-add-layer` / `-remove-layer` / `-paint-layer` | `terrain \| call CreateLayer("Assets/Terrain/Grass.terrainlayer", unity.asset("….png"))`, `T \| call AddLayer(…)`, `RemoveLayer(0)`, `PaintLayer(1, 1.0, 0, 0, 64, 64)` |
+| `terrain-set-detail-prototypes` / `-set-tree-prototypes` | `T \| call AddDetailPrototype(…)`, `AddTreePrototype(unity.asset("….prefab"))`; `set terrainData.treePrototypes[0] = {prefab: …, bendFactor: 0.3}` |
+| `terrain-place-trees` | `T \| call PlaceTrees(0, 200, 0.1, 0.1, 0.5, 0.5)`, `PlaceTreesAt(["(0.5, 0.5)"], 0)`, `ClearTrees()` |
+| `terrain-set-neighbors` | `T \| call SetNeighbors(left, top, right, bottom)` |
+| `terrain-modify-component` | plain `set` on Terrain / TerrainData members |
 
 ## Installation
 
