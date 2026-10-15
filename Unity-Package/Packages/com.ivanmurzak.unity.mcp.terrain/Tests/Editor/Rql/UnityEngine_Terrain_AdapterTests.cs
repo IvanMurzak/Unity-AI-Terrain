@@ -104,6 +104,8 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Tests.Rql.Terrains
 
             Assert.AreEqual("1", Result(Ok(T + " | call RemoveLayer(0)")));
             Assert.AreEqual("Rock", Data.terrainLayers[0].name);
+            // The paint follows its layer: the cells painted with Rock keep it (the removed Grass channel does not take over).
+            Assert.AreEqual(1f, Data.GetAlphamaps(2, 2, 1, 1)[0, 0, 0], 1e-3f);
         }
 
         [Test]

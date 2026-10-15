@@ -155,8 +155,44 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Terrains
             var list = new List<TerrainLayer>(data.terrainLayers ?? Array.Empty<TerrainLayer>());
             if (index < 0 || index >= list.Count) throw new ArgumentOutOfRangeException(nameof(index), $"layer {index} does not exist ({list.Count} layer(s))");
             list.RemoveAt(index);
-            TerrainOps.Write(t, data, "remove layer", () => data.terrainLayers = list.ToArray(), alphamaps: true);
+            var kept = AlphamapsWithout(data, index);
+            TerrainOps.Write(t, data, "remove layer", () =>
+            {
+                data.terrainLayers = list.ToArray();
+                if (kept != null) data.SetAlphamaps(0, 0, kept);
+            }, alphamaps: true);
             return list.Count;
+        }
+
+        /// <summary>
+        /// The splat map without the channel of layer <paramref name="index"/> (assigning terrainLayers keeps the channels by
+        /// position, so the later layers would take over the removed layer's paint), each cell renormalized; a cell painted
+        /// only with the removed layer goes to layer 0, like the Terrain Inspector. Null when no layer remains.
+        /// </summary>
+        private static float[,,]? AlphamapsWithout(TerrainData data, int index)
+        {
+            int layers = data.alphamapLayers;
+            if (layers <= 1 || index >= layers) return null;
+            int w = data.alphamapWidth, h = data.alphamapHeight;
+            var maps = data.GetAlphamaps(0, 0, w, h);
+            var kept = new float[h, w, layers - 1];
+            for (int row = 0; row < h; row++)
+                for (int col = 0; col < w; col++)
+                {
+                    float sum = 0f;
+                    for (int l = 0, k = 0; l < layers; l++)
+                    {
+                        if (l == index) continue;
+                        kept[row, col, k] = maps[row, col, l];
+                        sum += maps[row, col, l];
+                        k++;
+                    }
+                    if (sum > 1e-4f)
+                        for (int k = 0; k < layers - 1; k++) kept[row, col, k] /= sum;
+                    else
+                        kept[row, col, 0] = 1f;
+                }
+            return kept;
         }
 
         // ------------------------------------------------------------ prototypes and trees
